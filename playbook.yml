@@ -1,0 +1,10 @@
+---
+- name: Run script on EC2
+  hosts: ec2
+  become: yes
+  tasks:
+    - name: Update apt packages
+      ansible.builtin.shell: sudo apt update -y
+
+    - name: Create a test file
+      ansible.builtin.shell: echo "Deployed via Jenkins Pipeline!" > /home/ubuntu/test.txt
