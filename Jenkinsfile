@@ -25,7 +25,7 @@ pipeline {
 
                     echo '📡 Extracting EC2 Public IP...'
                     script {
-                        def ip = sh(returnStdout: true, script: "aws ec2 describe-instances --filters 'Name=tag:Name,Values=MyTerraformInstance' --query 'Reservations[*].Instances[*].PublicIpAddress' --output text").trim()
+                        def ip = sh(returnStdout: true, script: "aws ec2 describe-instances --region eu-west-3 --filters 'Name=tag:Name,Values=MyTerraformInstance' --query 'Reservations[*].Instances[*].PublicIpAddress' --output text").trim()
                         echo "Public IP = ${ip}"
                         writeFile file: '../ansible/inventory.ini', text: "[ec2]\n${ip}\n"
                     }
