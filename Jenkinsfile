@@ -55,6 +55,9 @@ ${publicIp} ansible_user=ubuntu ansible_ssh_private_key_file=${SSH_PRIVATE_KEY_P
 
                     // Ensure private key file has correct permissions
                     sh "chmod 600 ${SSH_PRIVATE_KEY_PATH} || true"
+                    sh "ssh-keyscan -H 52.47.76.89 >> /var/jenkins_home/.ssh/known_hosts"
+                    sh "chown jenkins:jenkins /var/jenkins_home/.ssh/known_hosts"
+                    sh "chmod 644 /var/jenkins_home/.ssh/known_hosts"
 
                     sh """
                         ansible-playbook \
