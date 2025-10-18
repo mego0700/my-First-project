@@ -15,7 +15,7 @@ provider "aws" {
 # OPTION B: create AWS key pair from local public key file (uncomment if using)
  resource "aws_key_pair" "jenkins" {
    key_name   = var.key_name
-   public_key = file("${path.module}/id_rsa.pub")
+   public_key = file("${path.module}/jenkins_key.pub")
  }
 
 resource "aws_security_group" "allow_ssh_http" {
@@ -68,4 +68,5 @@ output "public_ip" {
   description = "The public IP of the EC2 instance"
   value       = aws_instance.example_instance.public_ip
 }
+
 
