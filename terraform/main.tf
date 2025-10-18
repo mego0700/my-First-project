@@ -13,10 +13,10 @@ provider "aws" {
 }
 
 # OPTION B: create AWS key pair from local public key file (uncomment if using)
-# resource "aws_key_pair" "jenkins" {
-#   key_name   = var.key_name
-#   public_key = file("${path.module}/jenkins_key.pub")
-# }
+ resource "aws_key_pair" "jenkins" {
+   key_name   = var.key_name
+   public_key = file("${path.module}/id_rsa.pub")
+ }
 
 resource "aws_security_group" "allow_ssh_http" {
   name        = "allow_ssh_http_${replace(timestamp(), "[:TZ-]", "")}"
@@ -55,9 +55,9 @@ resource "aws_instance" "example_instance" {
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.allow_ssh_http.id]
   # If you used OPTION B (resource aws_key_pair.jenkins), use:
-  # key_name = aws_key_pair.jenkins.key_name
+   key_name = aws_key_pair.jenkins.key_name
   # If you created Key Pair in console (OPTION A), use var.key_name:
-  key_name = var.key_name
+  # key_name = var.key_name
 
   tags = {
     Name = "MyTerraformInstance"
@@ -68,3 +68,4 @@ output "public_ip" {
   description = "The public IP of the EC2 instance"
   value       = aws_instance.example_instance.public_ip
 }
+
