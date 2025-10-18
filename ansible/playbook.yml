@@ -3,8 +3,19 @@
   hosts: ec2
   become: yes
   tasks:
-    - name: Update apt packages
-      ansible.builtin.shell: sudo apt update -y
+    - name: Wait for SSH to be available
+      wait_for:
+        host: "{{ inventory_hostname }}"
+        port: 22
+        timeout: 300
+        state: started
+
+    - name: Update apt packages (Debian/Ubuntu)
+      ansible.builtin.apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
 
     - name: Create a test file
       ansible.builtin.shell: echo "Deployed via Jenkins Pipeline!" > /home/ubuntu/test.txt
+      args:
+        executable: /bin/bash
